@@ -6,7 +6,7 @@ use enet_sys::{
     ENET_PROTOCOL_MAXIMUM_CHANNEL_COUNT,
 };
 
-use crate::{Address, EnetKeepAlive, Error, Event, Peer};
+use crate::{Address, EnetKeepAlive, Error, Event, Peer, Packet};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 /// Represents a bandwidth limit or unlimited.
@@ -210,6 +210,11 @@ impl<T> Host<T> {
         }
 
         Ok(Peer::new(res))
+    }
+
+    /// lubie placki
+    pub fn broadcast(&mut self, packet: Packet, channel_id: u8) {
+        unsafe { enet_sys::enet_host_broadcast(self.inner, channel_id, packet.into_inner()) };
     }
 }
 
